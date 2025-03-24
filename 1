@@ -1,0 +1,97 @@
+#include <iostream>
+#include <cmath>
+
+const double g = 9.81;
+const double PI = std::acos(-1);
+
+double f(double alpha, double V, double T) {
+    return std::sin(alpha) - (g * T) / (2 * V);
+}
+
+double chord_method(double (*f)(double, double, double), double a, double b, double V, double T, double eps, int max_iter) {
+    int iteration = 0;
+    if (f(a, V, T) * f(b, V, T) >= 0) {
+        return NAN;
+    }
+
+    double x = a - (b - a) * f(a, V, T) / (f(b, V, T) - f(a, V, T));
+
+    for (int i = 0; i < max_iter; ++i) {
+        if (std::abs(f(x, V, T)) < eps) {
+            break;
+        }
+
+        if (f(a, V, T) * f(x, V, T) < 0) {
+            b = x;
+        }
+        else {
+            a = x;
+        }
+
+        x = a - (b - a) * f(a, V, T) / (f(b, V, T) - f(a, V, T));
+        iteration++;
+    }
+
+    return x * 180 / PI;
+}
+
+int main() {
+    double V = 20;
+    double T = 2;
+
+    double a = 0;
+    double b = PI / 2;
+    double epsilon = 1e-6;
+    int max_iter = 1000;
+
+    double alpha = chord_method(f, a, b, V, T, epsilon, max_iter);
+    if (!std::isnan(alpha)) {
+        std::cout << "Angle alpha: " << alpha << " degrees" << std::endl;
+    }
+
+    return 0;
+}
+
+
+
+
+import math
+
+g = 9.81
+
+def f(alpha, V, T):
+    return math.sin(alpha) - (g * T) / (2 * V)
+
+def chord_method(f, a, b, V, T, eps, max_iter):
+    if f(a, V, T) * f(b, V, T) >= 0:
+        return None
+
+    x = a - (b - a) * f(a, V, T) / (f(b, V, T) - f(a, V, T))
+
+    for _ in range(max_iter):
+        if abs(f(x, V, T)) < eps:
+            break
+
+        if f(a, V, T) * f(x, V, T) < 0:
+            b = x
+        else:
+            a = x
+
+        x = a - (b - a) * f(a, V, T) / (f(b, V, T) - f(a, V, T))
+
+    return x * 180 / math.pi
+
+V = 20
+T = 2
+
+a = 0
+b = math.pi / 2
+epsilon = 1e-6
+max_iter = 1000
+
+alpha = chord_method(f, a, b, V, T, epsilon, max_iter)
+if alpha is not None:
+    print(f"Angle alpha: {alpha} degrees")
+
+
+
