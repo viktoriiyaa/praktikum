@@ -1,0 +1,81 @@
+#include <iostream>
+#include <cmath>
+
+const double g = 9.81;
+const double PI = std::acos(-1);
+
+double f(double alpha, double H, double L) {
+    return std::tan(alpha) - (4 * H) / L;
+}
+
+double dichotomy_method(double (*f)(double, double, double), double a, double b, double H, double L, double eps) {
+    while ((b - a) / 2 > eps) {
+        double c = (a + b) / 2;
+        if (f(c, H, L) == 0) {
+            return c;
+        } else if (f(a, H, L) * f(c, H, L) < 0) {
+            b = c;
+        } else {
+            a = c;
+        }
+    }
+    return (a + b) / 2;
+}
+
+int main() {
+    double H = 10;
+    double L = 50;
+
+    double a = 0;
+    double b = PI / 2;
+    double epsilon = 1e-6;
+
+    double alpha = dichotomy_method(f, a, b, H, L, epsilon);
+    double V = std::sqrt((g * L) / std::sin(2 * alpha));
+
+    std::cout << "Angle alpha: " << alpha * 180 / PI << " degrees" << std::endl;
+    std::cout << "Initial velocity V: " << V << " m/s" << std::endl;
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+import math
+
+g = 9.81
+
+def f(alpha, H, L):
+    return math.tan(alpha) - (4 * H) / L
+
+def dichotomy_method(f, a, b, H, L, eps):
+    while (b - a) / 2 > eps:
+        c = (a + b) / 2
+        if f(c, H, L) == 0:
+            return c
+        elif f(a, H, L) * f(c, H, L) < 0:
+            b = c
+        else:
+            a = c
+    return (a + b) / 2
+
+H = 10
+L = 50
+
+a = 0
+b = math.pi / 2
+epsilon = 1e-6
+
+alpha = dichotomy_method(f, a, b, H, L, epsilon)
+V = math.sqrt((g * L) / math.sin(2 * alpha))
+
+print(f"Angle alpha: {alpha * 180 / math.pi} degrees")
+print(f"Initial velocity V: {V} m/s")
