@@ -25,31 +25,10 @@ int main() {
     double result = 0.0;
     int n = 1; // Начальное количество прямоугольников
 
+    // Переменные для нижнего и верхнего пределов интегрирования
+    double lowerLimit = 0.0; // Нижний предел
+    double upperLimit = 1.0; // Верхний предел
+
     // Перебираем значения a
-    for (double a = -2.0; a <= 1.0; a += 0.5) {
-        std::cout << "a = " << a << ": ";
-        previousResult = 0.0;
-        n = 1; // Сброс количества прямоугольников
+    for (double a = -2.0; a <= 1.0; a
 
-        while (true) {
-            result = rectangleMethod(a, epsilon, b, n);
-            
-            // Проверка на сходимость
-            if (fabs(result - previousResult) < 1e-6) {
-                break; // Достигнута заданная точность
-            }
-
-            previousResult = result;
-            n *= 2; // Увеличиваем количество прямоугольников
-        }
-
-        // Проверка на расходимость
-        if (a < -1.0) {
-            std::cout << "Интеграл расходится." << std::endl;
-        } else {
-            std::cout << "Значение интеграла от x^" << a << " * ln(x) от " << epsilon << " до " << b << " = " << result << std::endl;
-        }
-    }
-
-    return 0;
-}
