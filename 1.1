@@ -1,0 +1,55 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+double f(double x, double a) {
+    return pow(x, a) * log(x); // f(x) = x^a * ln(x)
+}
+
+double rectangleMethod(double a, double epsilon, double b, int n) {
+    double h = (b - epsilon) / n; // Ширина прямоугольников
+    double sum = 0.0;
+
+    for (int i = 0; i < n; ++i) {
+        double x = epsilon + i * h; // Левый конец интервала
+        sum += f(x, a) * h; // Площадь прямоугольника
+    }
+
+    return sum;
+}
+
+int main() {
+    double epsilon = 1e-10; // Маленькое значение для нижнего предела
+    double b = 1.0; // Верхний предел
+    double previousResult = 0.0;
+    double result = 0.0;
+    int n = 1; // Начальное количество прямоугольников
+
+    // Перебираем значения a
+    for (double a = -2.0; a <= 1.0; a += 0.5) {
+        std::cout << "a = " << a << ": ";
+        previousResult = 0.0;
+        n = 1; // Сброс количества прямоугольников
+
+        while (true) {
+            result = rectangleMethod(a, epsilon, b, n);
+            
+            // Проверка на сходимость
+            if (fabs(result - previousResult) < 1e-6) {
+                break; // Достигнута заданная точность
+            }
+
+            previousResult = result;
+            n *= 2; // Увеличиваем количество прямоугольников
+        }
+
+        // Проверка на расходимость
+        if (a < -1.0) {
+            std::cout << "Интеграл расходится." << std::endl;
+        } else {
+            std::cout << "Значение интеграла от x^" << a << " * ln(x) от " << epsilon << " до " << b << " = " << result << std::endl;
+        }
+    }
+
+    return 0;
+}
