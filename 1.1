@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <cmath>
 #include <iomanip>
@@ -30,5 +31,30 @@ int main() {
     double upperLimit = 1.0; // Верхний предел
 
     // Перебираем значения a
-    for (double a = -2.0; a <= 1.0; a
+    for (double a = -2.0; a <= 1.0; a += 0.5) {
+        std::cout << "a = " << a << ": ";
+        previousResult = 0.0;
+        n = 1; // Сброс количества прямоугольников
 
+        while (true) {
+            result = rectangleMethod(a, epsilon, upperLimit, n);
+            
+            // Проверка на сходимость
+            if (fabs(result - previousResult) < 1e-6) {
+                break; // Достигнута заданная точность
+            }
+
+            previousResult = result;
+            n *= 2; // Увеличиваем количество прямоугольников
+        }
+
+        // Проверка на расходимость
+        if (a < -1.0) {
+            std::cout << "Интеграл расходится." << std::endl;
+        } else {
+            std::cout << "Значение интеграла от x^" << a << " * ln(x) от " << lowerLimit << " до " << upperLimit << " = " << result << std::endl;
+        }
+    }
+
+    return 0;
+}
