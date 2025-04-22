@@ -1,0 +1,39 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+double f(double x) {
+    return sqrt(x) / (1 + x); // Изменяем функцию на sqrt(x) / (1 + x)
+}
+
+double rectangleMethod(double a, double b, int n) {
+    double h = (b - a) / n;
+    double sum = 0.0;
+
+    for (int i = 0; i < n; ++i) {
+        double x = a + i * h;
+        sum += f(x) * h;
+    }
+
+    return sum;
+}
+
+int main() {
+    double a = 2.0 / M_PI; // Устанавливаем нижнюю границу интегрирования
+    double b = 20.0; // Увеличиваем верхнюю границу до 20
+    double precision = 1e-10;
+    int n = 1;
+    double integral = 0.0;
+    double previousIntegral = 0.0;
+
+    do {
+        previousIntegral = integral;
+        integral = rectangleMethod(a, b, n);
+        n *= 2;
+    } while (fabs(integral - previousIntegral) > precision);
+
+    std::cout << std::fixed << std::setprecision(10);
+    std::cout << "Приближенное значение интеграла от " << a << " до +бесконечности: " << integral << std::endl;
+
+    return 0;
+}
