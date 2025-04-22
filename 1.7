@@ -1,0 +1,42 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+double f(double x) {
+    return sqrt((pow(x, 5)) / (4 - pow(x, 2))); // Изменяем функцию на sqrt(x^5 / (4 - x^2))
+}
+
+double rectangleMethod(double a, double b, int n) {
+    double h = (b - a) / n;
+    double sum = 0.0;
+
+    for (int i = 0; i < n; ++i) {
+        double x = a + i * h;
+        sum += f(x) * h;
+    }
+
+    return sum;
+}
+
+int main() {
+    double a = 0.0; // Устанавливаем нижнюю границу интегрирования
+    double b = 2.0; // Устанавливаем верхнюю границу интегрирования
+    double precision = 1e-10;
+    int n = 1;
+    double integral = 0.0;
+    double previousIntegral = 0.0;
+
+    do {
+        previousIntegral = integral;
+        integral = rectangleMethod(a, b, n);
+        n *= 2;
+
+        std::cout << "Integral: " << integral << ", Previous Integral: " << previousIntegral << ", n: " << n << std::endl;
+
+    } while (fabs(integral - previousIntegral) > precision);
+
+    std::cout << std::fixed << std::setprecision(10);
+    std::cout << "Приближенное значение интеграла от " << a << " до " << b << ": " << integral << std::endl;
+
+    return 0;
+}
