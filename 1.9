@@ -1,0 +1,44 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+double f(double x, double a, double b) {
+    return exp(-a * x) * cos(b * x); // Изменяем функцию на e^(-ax) * cos(bx)
+}
+
+double rectangleMethod(double a, double b, double c, double d, int n) {
+    double h = (d - c) / n;
+    double sum = 0.0;
+
+    for (int i = 0; i < n; ++i) {
+        double x = c + i * h;
+        sum += f(x, a, b) * h;
+    }
+
+    return sum;
+}
+
+int main() {
+    double a = 1.0; // Параметр a
+    double b = 1.0; // Параметр b
+    double c = 1.0; // Нижняя граница интегрирования
+    double d = 20.0; // Верхняя граница интегрирования
+    double precision = 1e-10;
+    int n = 1;
+    double integral = 0.0;
+    double previousIntegral = 0.0;
+
+    do {
+        previousIntegral = integral;
+        integral = rectangleMethod(a, b, c, d, n);
+        n *= 2;
+
+        std::cout << "Integral: " << integral << ", Previous Integral: " << previousIntegral << ", n: " << n << std::endl;
+
+    } while (fabs(integral - previousIntegral) > precision);
+
+    std::cout << std::fixed << std::setprecision(10);
+    std::cout << "Приближенное значение интеграла от " << c << " до " << d << ": " << integral << std::endl;
+
+    return 0;
+}
