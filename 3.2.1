@@ -4,26 +4,27 @@
 
 using namespace std;
 
-// Функция для вычисления произведения до заданной точности, используя метод суммы логарифмов
-double calculate_product_sum(int problem_number) {
-    double sum_log = 0.0; // Сумма логарифмов членов произведения
+// Функция для вычисления произведения до заданной точности, используя метод суммирования членов ряда
+double calculate_product_series(int problem_number, int max_terms = 1000) {
+    double product = 1.0;
     double term;
     double tolerance = 1e-6; // 10^-6
     int n = 0; // Начальное значение n для каждой задачи
+    int terms_calculated = 0;
 
     // Установим начальное значение n в зависимости от номера задачи
     switch (problem_number) {
         case 1: n = 2; break;
-        case 2: n = 2; break; // Изменено: n = 2
-        case 3: n = 3; break; // Изменено: n = 3
+        case 2: n = 2; break;
+        case 3: n = 3; break;
         case 4: n = 0; break;
         default:
             cout << "Некорректный номер задачи." << endl;
             return NAN; // Возвращаем NAN для обозначения ошибки
     }
 
-    // Вычисление произведения до достижения заданной точности или расходимости
-    while (true) {
+    // Вычисление произведения до достижения заданной точности или до достижения лимита итераций
+    while (terms_calculated < max_terms) {
         switch (problem_number) {
             case 1:
                 term = (1.0 - (1.0 / (n * n)));
@@ -35,7 +36,7 @@ double calculate_product_sum(int problem_number) {
                 term = ((pow(n, 2) + n - 6.0) / (pow(n, 2) + n - 2.0));
                 break;
             case 4:
-                term = (1.0 + pow(1.0 / 3.0, n)); // Исправлена формула для 4-го задания
+                term = (1.0 + pow(1.0 / 3.0, n));
                 break;
             default:
                 return NAN; // Никогда не достигнет, если начальная проверка прошла
@@ -47,38 +48,30 @@ double calculate_product_sum(int problem_number) {
             return NAN;
         }
 
-        // Проверка на отрицательность члена (логарифм определен только для положительных чисел)
-        if (term <= 0) {
-            cout << "Расходится (член <= 0)." << endl;
-            return NAN;
-        }
-
-        // Добавляем логарифм текущего члена к сумме логарифмов
-        sum_log += log(term);
+        // Умножаем текущее произведение на очередной член
+        double old_product = product;
+        product *= term;
 
         // Увеличиваем n
         n++;
+        terms_calculated++;
 
-        // Проверяем сходимость по изменению суммы логарифмов (с осторожностью!)
-        // Проверяем, что term близок к 1 (log(term) близок к 0)
-        double log_term = log(term);
-        if (abs(log_term) < tolerance) {
+        // Проверяем сходимость (изменение произведения меньше заданной точности)
+        if (abs(product - old_product) < tolerance) {
             cout << "Сходится." << endl;
-            return exp(sum_log); // Возвращаем экспоненту от суммы логарифмов
-        }
-
-        if (n > 100000) {
-            cout << "Превышено количество итераций.  Возможно, расходится или сходится очень медленно." << endl;
-            return NAN;
+            return product;
         }
     }
+
+    cout << "Превышено максимальное количество членов ряда.  Возможно, расходится или сходится очень медленно." << endl;
+    return NAN;
 }
 
 int main() {
     // Вычисляем и выводим результаты для каждой задачи
     for (int i = 1; i <= 4; ++i) {
         cout << "Задача " << i << ": ";
-        double result = calculate_product_sum(i);
+        double result = calculate_product_series(i);
         if (!isnan(result)) {
             cout << fixed << setprecision(10) << result << endl;
         }
