@@ -1,0 +1,77 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+
+using namespace std;
+
+// Функция для вычисления произведения до заданной точности, используя метод суммирования членов ряда
+double calculate_product_series(int problem_number, int max_terms = 1000) {
+    double product = 1.0;
+    double term;
+    double tolerance = 1e-6; // 10^-6
+    int n = 0; // Начальное значение n для каждой задачи
+    int terms_calculated = 0;
+
+    // Установим начальное значение n в зависимости от номера задачи
+    switch (problem_number) {
+        case 1: n = 1; break;  // Для первого задания из нового списка
+        case 3: n = 1; break;  // Для третьего задания из нового списка (не путать с предыдущими)
+        default:
+            cout << "Некорректный номер задачи." << endl;
+            return NAN; // Возвращаем NAN для обозначения ошибки
+    }
+
+    // Вычисление произведения до достижения заданной точности или до достижения лимита итераций
+    while (terms_calculated < max_terms) {
+        switch (problem_number) {
+            case 1:
+                term = (1.0 + (cos(2.0 * n) / n));
+                break;
+            case 3:
+                term = cos((double)(n + 1) / (double)(n * n + 1));
+                break;
+            default:
+                return NAN; // Никогда не достигнет, если начальная проверка прошла
+        }
+
+        // Проверка на расходимость (если член слишком близок к 0 или бесконечности)
+        if (abs(term) < 1e-10 || abs(term) > 1e10) {
+            cout << "Расходится." << endl;
+            return NAN;
+        }
+
+        // Умножаем текущее произведение на очередной член
+        double old_product = product;
+        product *= term;
+
+        // Увеличиваем n
+        n++;
+        terms_calculated++;
+
+        // Проверяем сходимость (изменение произведения меньше заданной точности)
+        if (abs(product - old_product) < tolerance) {
+            cout << "Сходится." << endl;
+            return product;
+        }
+    }
+
+    cout << "Превышено максимальное количество членов ряда.  Возможно, расходится или сходится очень медленно." << endl;
+    return NAN;
+}
+
+int main() {
+    // Вычисляем и выводим результаты для каждой задачи
+    cout << "Задача 1: ";
+    double result1 = calculate_product_series(1); // Решаем первый пример
+    if (!isnan(result1)) {
+        cout << fixed << setprecision(10) << result1 << endl;
+    }
+
+    cout << "Задача 3: ";
+    double result3 = calculate_product_series(3); // Решаем третий пример
+    if (!isnan(result3)) {
+        cout << fixed << setprecision(10) << result3 << endl;
+    }
+
+    return 0;
+}
