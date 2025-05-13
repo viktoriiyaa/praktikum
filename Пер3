@@ -1,0 +1,41 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+// Function to calculate the sum of the functional series
+double func(double x, int n) {
+    double sum_f = 0.0;
+    double q = x;
+
+    for (int i = 1; i < n; ++i) {
+        sum_f += q;
+        double p = (2.0 * i) * (2.0 * i + 1);
+        q *= (-1) * x * x / p;
+    }
+
+    return sum_f;
+}
+
+int main() {
+    double x;
+    int n;
+
+    // Enter value in degree in x
+    cout << "Enter value in degree in x = ";
+    cin >> x;
+
+    // Enter number of terms
+    cout << "Enter number of terms n = ";
+    cin >> n;
+
+    // Call function
+    double s = func(x, n);
+
+    // Print sum
+    cout << "sum = " << fixed << setprecision(10) << s << endl;
+
+    return 0;
+}
+.
