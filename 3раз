@@ -1,0 +1,106 @@
+Насколько я понимаю, ты имеешь в виду вот эти строки:
+
+*   Invalid problem number. - Некорректный номер задачи.
+*   Diverges. - Расходится.
+*   Converges. - Сходится.
+*   Exceeded the maximum number of series members. Possibly diverges or converges very slowly. - Превышено максимальное количество членов ряда. Возможно, расходится или сходится очень медленно.
+*   Failed to calculate. - Не удалось вычислить.
+
+В коде нужно заменить английские фразы на русские, чтобы программа выводила сообщения на русском языке. Вот как это будет выглядеть:#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <limits>
+
+using namespace std;
+
+double calculate_product_series(int problem_number, int max_terms = 1000) {
+    double product = 1.0;
+    double term;
+    double tolerance = 1e-6;
+    int n = 0;
+    int terms_calculated = 0;
+
+    switch (problem_number) {
+        case 1: n = 2; break;
+        case 2: n = 2; break;
+        case 3: n = 3; break;
+        case 4: n = 0; break;
+        default:
+            cout << "Некорректный номер задачи." << endl; // Заменено
+            return numeric_limits<double>::quiet_NaN();
+    }
+
+    while (terms_calculated < max_terms) {
+        switch (problem_number) {
+            case 1:
+                term = (1.0 - (1.0 / pow(n, 2)));
+                break;
+            case 2:
+                term = (pow(n, 3) - 1.0) / (pow(n, 3) + 1.0);
+                break;
+            case 3:
+                term = (pow(n, 2) + n - 6.0) / (pow(n, 2) + n - 2.0);
+                break;
+            case 4:
+                term = 1.0 + pow(1.0 / 3.0, pow(2, n));
+                break;
+            default:
+                return numeric_limits<double>::quiet_NaN();
+        }
+
+        if (abs(term) < 1e-10 || abs(term) > 1e10) {
+            cout << "Расходится." << endl; // Заменено
+            return numeric_limits<double>::quiet_NaN();
+        }
+
+        double old_product = product;
+        product *= term;
+
+        n++;
+        terms_calculated++;
+
+        if (abs(product - old_product) < tolerance) {
+            cout << "Сходится." << endl; // Заменено
+            return product;
+        }
+    }
+
+    cout << "Превышено максимальное количество членов ряда. Возможно, расходится или сходится очень медленно." << endl; // Заменено
+    return numeric_limits<double>::quiet_NaN();
+}
+
+int main() {
+    cout << "Задача 1: ";
+    double result1 = calculate_product_series(1);
+    if (!isnan(result1)) {
+        cout << fixed << setprecision(10) << result1 << endl;
+    } else {
+        cout << "Не удалось вычислить." << endl; // Заменено
+    }
+
+    cout << "Задача 2: ";
+    double result2 = calculate_product_series(2);
+    if (!isnan(result2)) {
+        cout << fixed << setprecision(10) << result2 << endl;
+    } else {
+        cout << "Не удалось вычислить." << endl; // Заменено
+    }
+
+    cout << "Задача 3: ";
+    double result3 = calculate_product_series(3);
+    if (!isnan(result3)) {
+        cout << fixed << setprecision(10) << result3 << endl;
+    } else {
+        cout << "Не удалось вычислить." << endl; // Заменено
+    }
+
+    cout << "Задача 4: ";
+    double result4 = calculate_product_series(4);
+    if (!isnan(result4)) {
+        cout << fixed << setprecision(10) << result4 << endl;
+    } else {
+        cout << "Не удалось вычислить." << endl; // Заменено
+    }
+
+    return 0;
+}
