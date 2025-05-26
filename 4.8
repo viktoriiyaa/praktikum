@@ -1,0 +1,62 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+int main() {
+    double tolerance = 1e-6; // 10^-6
+    int max_iterations = 1000; // Maximum number of terms to check for convergence
+    double x_step = 0.1; // Increment for x
+    double radius = 0.0;
+
+    //Iterate positive and negative values
+    for(int sign = -1; sign <=1; sign += 2) {
+        double x = 0.0;
+        while (true) {
+            x += sign * x_step;
+            double sum = 0.0;
+            double current_term = 1.0;
+            int n = 0;
+            bool converged = false;
+
+            for (int i = 0; i < max_iterations; ++i) {
+                sum += current_term;
+                n++;
+                current_term *= x / (2.0 * n * (2.0 * n - 1.0));
+                if (std::abs(current_term) < tolerance) {
+                    converged = true;
+                    break;
+                }
+            }
+            if (!converged) {
+                radius = std::abs(x - sign * x_step);
+                std::cout << "Numerical radius of convergence (absolute " << (sign == 1 ? "positive" : "negative") << " limit): "
+                          << std::fixed << std::setprecision(6) << radius << std::endl;
+                break;
+            }
+        }
+    }
+
+    // Get X
+    double user_x;
+    std::cout << "Enter the value of x: ";
+    std::cin >> user_x;
+
+    //Check abs(user_x) less than radius
+    if (std::abs(user_x) > radius) {
+        std::cout << "The series diverges for x = " << user_x << std::endl;
+        return 1;
+    }
+
+    double series_sum = 0.0;
+    double current_term = 1.0;
+    int n = 0;
+    //Recalculate the SUM
+    while (std::abs(current_term) > tolerance) {
+        series_sum += current_term;
+        n++;
+        current_term *= user_x / (2.0 * n * (2.0 * n - 1.0));
+    }
+
+    std::cout << "The sum of the series is: " << std::fixed << std::setprecision(8) << series_sum << std::endl;
+    return 0;
+}
