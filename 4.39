@@ -1,0 +1,64 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+double term(double x, int n) {
+    return pow(x, pow(n, 2)) / pow(9, pow(n, 3));
+}
+
+int main() {
+    double tolerance = 1e-6; // 10^-6
+    int max_iterations = 1000; // Maximum number of terms to check for convergence
+    double x_step = 0.1; // Increment for x
+    double radius = 0.0;
+
+    //Find convergence using the range
+    double x = 0.0;
+    while (true) {
+        x += x_step;
+        double sum = 0.0;
+        double current_term = term(x, 1); // n starts from 1
+        int n = 1;
+        bool converged = false;
+
+        for (int i = 1; i < max_iterations; ++i) { //Start from 1
+            sum += current_term;
+            n++;
+            current_term = term(x, n);
+            if (std::abs(current_term) < tolerance) {
+                converged = true;
+                break;
+            }
+        }
+        if (!converged) {
+            radius = x - x_step;
+            std::cout << "Numerical radius of convergence: " << std::fixed << std::setprecision(6) << radius << std::endl;
+            break;
+        }
+    }
+
+    // Getting X
+    double user_x;
+    std::cout << "Enter the value of x: ";
+    std::cin >> user_x;
+
+   //Checking if x is within the converge range
+    if (std::abs(user_x) > radius) {
+        std::cout << "The series diverges for x = " << user_x << std::endl;
+        return 1;
+    }
+
+    double series_sum = 0.0;
+    double current_term = term(user_x, 1); //n=1;
+    int n = 1;
+    //Calc sum
+    while (std::abs(current_term) > tolerance) {
+        series_sum += current_term;
+        n++;
+        current_term = term(user_x, n);
+    }
+
+    std::cout << "The sum of the series is: " << std::fixed << std::setprecision(8) << series_sum << std::endl;
+
+    return 0;
+}
