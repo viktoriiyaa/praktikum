@@ -1,35 +1,35 @@
 #include <iostream>
 #include <cmath>
 
-// Создать функцию sin(x)
-двойная функция(двойная x, целая n) {
-двойная сумма_f = 0,0;
-двойной q = x;
+// Create function sin(x)
+double func(double x, int n) {
+    double sum_f = 0.0;
+    double q = x;
 
-для (int i = 1; i < n; ++i) {
-сумма_f += q;
-двойной p = (двойной)((2,0 * i) * (2,0 * i + 1));
-q *= pow(-1.0, (2 * x + 1)) / p;
+    for (int i = 1; i < n; ++i) {
+        sum_f += q;
+        double p = (double)((2.0 * i) * (2.0 * i + 1));
+        q *= pow(-1.0, (2 * x + 1)) / p;
+    }
+    return sum_f;
 }
-вернуть сумму_f;
-}
 
-инт мейн() {
-// узлы драйвера
-// Введите значение в градусах по оси x
-двойной икс;
-std::cout << "Введите значение в градусах x = ";
-стд::cin >> х;
+int main() {
+    // driver nodes
+    // Enter value in degree in x
+    double x;
+    std::cout << "Enter value in degree in x = ";
+    std::cin >> x;
 
-// Введите количество терминов
-целочисленное n;
-std::cout << "Введите количество терминов n = ";
-стд::cin >> n;
+    // Enter number of terms
+    int n;
+    std::cout << "Enter number of terms n = ";
+    std::cin >> n;
 
-// вызов функции
-двойной s = функция(x, n);
+    // call function
+    double s = func(x, n);
 
-std::cout << "сумма = " << s << std::endl;
+    std::cout << "sum = " << s << std::endl;
 
-возврат 0;
+    return 0;
 }
