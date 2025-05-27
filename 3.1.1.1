@@ -1,0 +1,47 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+// Функция для вычисления суммы ряда с точностью tolerance
+double sum_series(double x, double tolerance = 1e-6, int max_terms = 100000) {
+   double sum = 0.0;
+   double term;
+   int n = 1;
+
+   while (n <= max_terms) {
+       double denominator = sin(n * x) + 1 + n * n;
+       if (denominator == 0) {
+           cout << "Деление на ноль при n = " << n << endl;
+           break;
+       }
+       term = pow(-1, n) / denominator;
+       sum += term;
+
+       if (fabs(term) < tolerance) {
+           break;
+       }
+       n++;
+   }
+
+   if (n == max_terms + 1) {
+       cout << "Достигнуто максимальное количество членов ряда, возможно, сходимость медленная." << endl;
+   }
+
+   return sum;
+}
+
+int main() {
+   cout << fixed << setprecision(10);
+
+   double x;
+   cout << "Введите значение x (в радианах): ";
+   cin >> x;
+
+   double result = sum_series(x);
+
+   cout << "Сумма ряда при x = " << x << " равна: " << result << endl;
+
+   return 0;
+}
