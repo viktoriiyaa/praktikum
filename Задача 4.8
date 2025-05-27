@@ -1,0 +1,57 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+
+using namespace std;
+
+// Функция для вычисления факториала (используем double для больших чисел)
+double factorial(int n) {
+   if (n == 0 || n == 1) return 1.0;
+   double result = 1.0;
+   for (int i = 2; i <= n; ++i)
+       result *= i;
+   return result;
+}
+
+// Функция для вычисления суммы ряда с точностью tolerance
+double sum_series(double x, double tolerance = 1e-6, int max_terms = 10000) {
+   double sum = 0.0;
+   double term;
+   int n = 0;
+
+   while (n < max_terms) {
+       double numerator = factorial(n);
+       double denominator = factorial(2 * n);
+       term = (numerator / denominator) * pow(x, n);
+
+       sum += term;
+
+       if (fabs(term) < tolerance) {
+           break;
+       }
+       n++;
+   }
+
+   if (n == max_terms) {
+       cout << "Достигнуто максимальное количество членов ряда, возможно, сходимость медленная." << endl;
+   }
+
+   return sum;
+}
+
+int main() {
+   cout << fixed << setprecision(10);
+
+   double x;
+   cout << "Введите значение x: ";
+   cin >> x;
+
+   // Радиус сходимости бесконечен, ряд сходится для любого x
+   cout << "Радиус сходимости: бесконечность" << endl;
+
+   double result = sum_series(x);
+
+   cout << "Сумма ряда при x = " << x << " равна: " << result << endl;
+
+   return 0;
+}
