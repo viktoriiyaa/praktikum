@@ -1,0 +1,18 @@
+// Функция для вычисления суммы четвертого ряда
+double sum_series_4(double tolerance = 1e-6, int max_terms = 100000) {
+    double sum = 0.0;
+    double term;
+    int n = 1;
+
+    while (n <= max_terms) {
+        term = (pow(2, n) + pow(-1, n) * pow(3, n)) / pow(5, n);
+        sum += term;
+
+        if (fabs(term) < tolerance) {
+            break;
+        }
+        n++;
+    }
+
+    return sum;
+}
