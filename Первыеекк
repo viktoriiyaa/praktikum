@@ -1,0 +1,89 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+// Функции для вычисления сумм рядов
+double sum_series_1(double tolerance = 1e-6, int max_terms = 100000) {
+    double sum = 0.0;
+    double term;
+    int k = 1;
+
+    while (k <= max_terms) {
+        term = 3.0 / (pow(2, k) - pow(-1, k - 1) * pow(2, k - 1));
+        sum += term;
+
+        if (fabs(term) < tolerance) {
+            break;
+        }
+        k++;
+    }
+
+    return sum;
+}
+
+double sum_series_2(double tolerance = 1e-6, int max_terms = 100000) {
+    double sum = 0.0;
+    double term;
+    int n = 1;
+
+    while (n <= max_terms) {
+        term = 2.0 / (pow(3, n) - pow(-1, n) * pow(2, n));
+        sum += term;
+
+        if (fabs(term) < tolerance) {
+            break;
+        }
+        n++;
+    }
+
+    return sum;
+}
+
+double sum_series_3(double tolerance = 1e-6, int max_terms = 100000) {
+    double sum = 0.0;
+    double term;
+    int n = 1;
+
+    while (n <= max_terms) {
+        term = pow(-1, n) / (pow(3, n) * pow(2, n));
+        sum += term;
+
+        if (fabs(term) < tolerance) {
+            break;
+        }
+        n++;
+    }
+
+    return sum;
+}
+
+double sum_series_4(double tolerance = 1e-6, int max_terms = 100000) {
+    double sum = 0.0;
+    double term;
+    int n = 1;
+
+    while (n <= max_terms) {
+        term = (pow(2, n) + pow(-1, n) * pow(3, n)) / pow(5, n);
+        sum += term;
+
+        if (fabs(term) < tolerance) {
+            break;
+        }
+        n++;
+    }
+
+    return sum;
+}
+
+int main() {
+    cout << fixed << setprecision(10);
+
+    cout << "Сумма первого ряда: " << sum_series_1() << endl;
+    cout << "Сумма второго ряда: " << sum_series_2() << endl;
+    cout << "Сумма третьего ряда: " << sum_series_3() << endl;
+    cout << "Сумма четвертого ряда: " << sum_series_4() << endl;
+
+    return 0;
+}
